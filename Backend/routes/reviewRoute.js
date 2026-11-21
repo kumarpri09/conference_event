@@ -1,0 +1,23 @@
+
+
+const express = require('express');
+const { body } = require('express-validator');
+const reviewController = require('../controller/reviewController.js');
+
+const router = express.Router();
+
+
+const reviewValidation = [
+    body('user').isString().trim().notEmpty().withMessage('User name is required'),
+    body('rating').isInt({ min: 1, max: 5 }).withMessage('Rating must be between 1 and 5'),
+    body('comment').isString().trim().notEmpty().withMessage('Comment is required')
+];
+
+
+router.get('/', reviewController.getAllReviews);
+router.get('/:id', reviewController.getReviewById);
+router.post('/', reviewValidation, reviewController.createReview);
+router.put('/:id', reviewController.updateReview);
+router.delete('/:id', reviewController.deleteReview);
+
+module.exports = router;
